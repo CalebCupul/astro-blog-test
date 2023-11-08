@@ -2,18 +2,10 @@
 import BlogTags from "../../components/BlogTags.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import BlogGrid from "../../components/BlogGrid.astro";
+import { fetchNewsData } from "../../utils/fetchNewsData.js";
+import { tags } from "../../utils/constants.js";
 
-const baseUrl = import.meta.env.NEWS_API_BASE_URL;
-const urlApiKey = "&apiKey=" + import.meta.env.NEWS_API_KEY;
-const endpoint = "top-headlines";
-const countryParam = "?country=us"; // pending make it dynamic
-
-const allPosts = await Astro.glob('../../pages/posts/*.md');
-// const tags = [...new Set(allPosts.map((post) => post.frontmatter.tags).flat())];
-const tags = ["business", "entertainment", "general", "health", "science", "sports", "technology"];
-const response = await fetch(baseUrl + endpoint + countryParam + urlApiKey);
-const data = await response.json();
-
+const data = await fetchNewsData();	
 const pageTitle = "My Astro Learning Blog";
 ---
 
