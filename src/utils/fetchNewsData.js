@@ -1,7 +1,7 @@
 const baseUrl = import.meta.env.NEWS_API_BASE_URL;
 const apiKey = import.meta.env.NEWS_API_KEY;
 
-export async function fetchNewsData({country = 'us', category = null} = {}) {
+export async function fetchNewsData({country = 'us', category = null, pageSize = null} = {}) {
     const endpoint = "top-headlines";
     const params = new URLSearchParams({
       country: country,
@@ -9,6 +9,7 @@ export async function fetchNewsData({country = 'us', category = null} = {}) {
     });
 
     if (category) { params.append('category', category)};
+    if (pageSize) { params.append('pageSize', pageSize)};
   
     try {
       const response = await fetch(`${baseUrl}${endpoint}?${params}`);
