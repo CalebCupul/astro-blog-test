@@ -1,0 +1,26 @@
+---
+import BlogTags from "../../components/BlogTags.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BlogGrid from "../../components/BlogGrid.astro";
+import { fetchNewsData } from "../../utils/fetchNewsData.js";
+import { TAGS, POSTS_PER_PAGE } from "../../utils/constants.js";
+import Pagination from "../../components/Pagination.astro";
+
+const { page: { lastPage: totalPages, currentPage, data }} = Astro.props;
+const pageTitle = "My Astro Learning Blog";
+
+export async function getStaticPaths({ paginate }) {  
+	const data = await fetchNewsData();	
+
+  	return paginate(data.articles, {
+		pageSize: POSTS_PER_PAGE,
+	});
+}
+---
+
+<BaseLayout pageTitle={pageTitle}>
+	<p>This is where I will post about my journey learning Astro.</p>
+	{totalPages > 1 && <Pagination currentPage={currentPage} totalPages={totalPages} />}
+	<BlogGrid posts={data}/>
+	<BlogTags tags={TAGS}/>
+</BaseLayout>

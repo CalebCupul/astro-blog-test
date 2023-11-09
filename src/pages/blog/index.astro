@@ -3,14 +3,18 @@ import BlogTags from "../../components/BlogTags.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import BlogGrid from "../../components/BlogGrid.astro";
 import { fetchNewsData } from "../../utils/fetchNewsData.js";
-import { tags } from "../../utils/constants.js";
+import { TAGS, POSTS_PER_PAGE } from "../../utils/constants.js";
+import Pagination from "../../components/Pagination.astro";
 
-const data = await fetchNewsData();	
+const data = await fetchNewsData();
+const totalPages = Math.ceil(data.articles.length / POSTS_PER_PAGE);
+const firstPageData = data.articles.slice(0, POSTS_PER_PAGE);
 const pageTitle = "My Astro Learning Blog";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-	<p>This is where I will post about my journey learning Astro.</p>
-	<BlogGrid posts={data.articles}/>
-	<BlogTags tags={tags}/>
+  <p>This is where I will post about my journey learning Astro.</p>
+  {totalPages > 1 && <Pagination currentPage={1} totalPages={totalPages} />}
+  <BlogGrid posts={firstPageData} />
+  <BlogTags tags={TAGS} />
 </BaseLayout>
