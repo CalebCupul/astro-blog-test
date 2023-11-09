@@ -2,12 +2,15 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import BlogGrid from "../../components/BlogGrid.astro";
 import { fetchNewsData } from "../../utils/fetchNewsData";
-import { tags } from "../../utils/constants.js";
+import { TAGS } from "../../utils/constants.js";
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
 
 export async function getStaticPaths() {
   const paths = [];
 
-  for (const tag of tags) {
+  for (const tag of TAGS) {
     try {
       const data = await fetchNewsData({ category: tag });
       paths.push({
@@ -25,8 +28,7 @@ export async function getStaticPaths() {
   }
   return paths;
 }
-const { tag } = Astro.params;
-const { posts } = Astro.props;
+
 ---
 
 <BaseLayout pageTitle={tag}>
