@@ -1,0 +1,32 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import BlogGrid from "../../../components/BlogGrid.astro";
+import { fetchNewsData } from "../../../utils/fetchNewsData";
+import { TAGS, POSTS_PER_PAGE } from "../../../utils/constants.js";
+import Pagination from "../../../components/Pagination.astro";
+import BlogTags from "../../../components/BlogTags.astro";
+
+const { tag } = Astro.params;
+const { data: posts, lastPage: totalPages, currentPage } = Astro.props.page;
+
+export async function getStaticPaths({ paginate }) {
+	const paths = [];
+	for (const tag of TAGS) {
+		const data = await fetchNewsData({ category: tag });
+		paths.push(paginate(data.articles, {
+			params: { tag },
+			pageSize: POSTS_PER_PAGE
+		}))
+	}
+	return paths.flat();
+}
+
+---
+
+<BaseLayout pageTitle={tag}>
+  <p>Posts tagged with {tag}</p>
+	{totalPages > 1 && <Pagination currentPage={currentPage} totalPages={totalPages} tag={tag} />}
+	<BlogGrid posts={posts}/>
+	<BlogTags tags={TAGS}/>
+
+</BaseLayout>

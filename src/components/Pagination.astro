@@ -1,8 +1,31 @@
 ---
-const { currentPage, totalPages } = Astro.props;
+const { currentPage, totalPages, tag } = Astro.props;
+
+const baseUrl = `/blog${tag ? `/${tag}` : ""}`;
+
+const prevPageUrl = `${baseUrl}/${currentPage - 1}`;
+const nextPageUrl = `${baseUrl}/${currentPage + 1}`;
 ---
 
 <nav aria-label="Page navigation">
-  {currentPage > 1 && <a class="bg-blue-600 text-slate-100 rounded-md px-3 py-2 mr-4 w-10" href={`/blog/${currentPage - 1}`}>Previous</a>}
-  {currentPage < totalPages && <a class="bg-blue-600 text-slate-100 rounded-md px-3 py-2" href={`/blog/${currentPage + 1}`}>Next</a>}
-</nav>      
+  {
+    currentPage > 1 && (
+      <a
+        class="bg-blue-600 text-slate-100 rounded-md px-3 py-2 mr-4 w-10"
+        href={prevPageUrl}
+      >
+        Previous
+      </a>
+    )
+  }
+  {
+    currentPage < totalPages && (
+      <a
+        class="bg-blue-600 text-slate-100 rounded-md px-3 py-2"
+        href={nextPageUrl}
+      >
+        Next
+      </a>
+    )
+  }
+</nav>
